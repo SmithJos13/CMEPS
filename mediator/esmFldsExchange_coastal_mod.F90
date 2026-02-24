@@ -260,22 +260,21 @@ contains
     ! to ice: atm fields
     ! ---------------------------------------------------------------------
     if (coastal_attr%atm_present .and. coastal_attr%ice_present) then
-      allocate(S_flds(14))
+      allocate(S_flds(13))
       S_flds = (/'Sa_u      ', & ! inst_zonalv_wind_height10m
                  'Sa_v      ', & ! inst_merid_wind_height10m                                     
                  'Sa_z      ', & ! lowest atmospheric height                                     
                  'Sa_tbot   ', & ! tenperature at lowest atm level                               
                  'Sa_shum   ', & ! Specific Humidity                                             
                  'Sa_pbot   ', & ! pressure bottom  
-                 'Faxa_snow ', & ! Snow
-                 'Faxa_rain ', & ! Rain
+                 'Faxa_rain ', & ! Snow
+                 'Faxa_snow ', & ! Rain
                  'Faxa_swvdr', & ! Short-wave
                  'Faxa_swvdf', & ! Short-wave
                  'Faxa_swndr', & ! Short-wave
                  'Faxa_swndf', & ! Short-wave
-                 'Faxa_swnet', & ! Short-wave net
                  'Faxa_lwdn ' /) ! Long-wave 
-                 
+               
       do n = 1,size(S_flds)
          fldname = trim(S_flds(n))
          call addfld_from(compatm, trim(fldname))
@@ -579,7 +578,7 @@ contains
     !   - Net longwave  rad         [W/m/m] 
     ! ---------------------------------------
     if (coastal_attr%atm_present .and. coastal_attr%ice_present) then                            
-      allocate(S_flds(14))                                                                       
+      allocate(S_flds(13))                                                                       
       S_flds = (/'Sa_u      ', & ! inst_zonal_wind_height10m
                  'Sa_v      ', & ! inst_merid_wind_height10m                                     
                  'Sa_z      ', & ! lowest atmospheric height                                     
@@ -592,7 +591,6 @@ contains
                  'Faxa_swvdf', & ! Short-wave                                                    
                  'Faxa_swndr', & ! Short-wave                                                    
                  'Faxa_swndf', & ! Short-wave
-                 'Faxa_swnet', & ! Short-wave net
                  'Faxa_lwdn '/)  ! long-wave                                                     
       do n = 1,size(S_flds)
          fldname = trim(S_flds(n))
@@ -600,7 +598,7 @@ contains
              fldchk(is_local%wrap%FBImp(compatm,compatm),trim(fldname),rc=rc) &
             ) then
             call addmap_from(compatm, trim(fldname), compice, &
-                 mapnstod_consf, coastal_attr%mapnorm, coastal_attr%atm2ice_smap) !!mapnstod_consf conservative interp 
+                 mapbilnr_nstod, coastal_attr%mapnorm, coastal_attr%atm2ice_smap) !!mapnstod_consf conservative interp 
             call addmrg_to(compice, trim(fldname), &
                  mrg_from=compatm, mrg_fld=trim(fldname), mrg_type='copy')
          end if
